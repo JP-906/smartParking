@@ -19,6 +19,7 @@ export interface Car {
 export interface ParkingRecord {
   id: string;
   plateNumber: string;
+  driverName: string; // Added driver name to record
   slotNumber: string;
   entryTime: string;
   exitTime?: string;
