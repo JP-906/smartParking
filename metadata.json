@@ -1,0 +1,5 @@
+{
+  "name": "SmartPark PSSMS",
+  "description": "A comprehensive Parking Space Sales Management System for Rubavu District, featuring digital recording of entries/exits, automatic fee calculation, and real-time slot tracking.",
+  "requestFramePermissions": []
+}
