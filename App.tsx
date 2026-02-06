@@ -452,23 +452,36 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* -------------------- OTHER TABS (FALLBACKS) -------------------- */}
+      {/* -------------------- PARKING SLOTS -------------------- */}
       {currentPage === Page.PARKING_SLOT && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-5 animate-in zoom-in duration-300">
-          {slots.map(slot => (
-            <div key={slot.id} className={`p-6 rounded-3xl border-4 transition-all flex flex-col items-center gap-4 group ${slot.status === SlotStatus.AVAILABLE ? 'bg-emerald-50 border-emerald-100 text-emerald-800' : 'bg-rose-50 border-rose-100 text-rose-800 shadow-inner'}`}>
-              <span className="font-black text-xl">{slot.slotNumber}</span>
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-sm ${slot.status === SlotStatus.AVAILABLE ? 'bg-white' : 'bg-rose-200'}`}>
-                <i className={`fas ${slot.status === SlotStatus.AVAILABLE ? 'fa-parking' : 'fa-car-side'}`}></i>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-5 animate-in zoom-in duration-300">
+          {slots.map(slot => {
+            const activeRecord = records.find(r => r.slotNumber === slot.slotNumber && r.status === 'Active');
+            return (
+              <div key={slot.id} className={`p-5 rounded-3xl border-4 transition-all flex flex-col items-center gap-3 group relative overflow-hidden ${slot.status === SlotStatus.AVAILABLE ? 'bg-emerald-50 border-emerald-100 text-emerald-800' : 'bg-slate-900 border-slate-800 text-white shadow-xl'}`}>
+                <span className={`font-black text-xl tracking-tighter ${slot.status === SlotStatus.OCCUPIED ? 'text-blue-400' : 'text-emerald-900'}`}>{slot.slotNumber}</span>
+                
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl shadow-sm ${slot.status === SlotStatus.AVAILABLE ? 'bg-white' : 'bg-slate-800'}`}>
+                  <i className={`fas ${slot.status === SlotStatus.AVAILABLE ? 'fa-parking' : 'fa-car-side'}`}></i>
+                </div>
+
+                {slot.status === SlotStatus.OCCUPIED && activeRecord ? (
+                  <div className="text-center w-full space-y-1 mt-1">
+                    <p className="font-mono font-black text-[12px] uppercase leading-tight text-white tracking-widest">{activeRecord.plateNumber}</p>
+                    <p className="text-[9px] font-bold uppercase text-slate-400 truncate w-full px-2" title={activeRecord.driverName}>{activeRecord.driverName}</p>
+                  </div>
+                ) : (
+                  <div className="h-10 flex items-center">
+                    <button onClick={() => setSelectedSlotForParking(slot)} className="text-[10px] font-black uppercase bg-slate-900 text-white px-4 py-2 rounded-xl shadow-lg hover:bg-blue-600 transition-all active:scale-95">Assign</button>
+                  </div>
+                )}
               </div>
-              {slot.status === SlotStatus.AVAILABLE && (
-                <button onClick={() => setSelectedSlotForParking(slot)} className="text-[10px] font-black uppercase bg-slate-900 text-white px-4 py-2 rounded-xl shadow-lg hover:bg-blue-600 transition-all active:scale-95">Assign</button>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
+      {/* -------------------- OTHER PAGES -------------------- */}
       {currentPage === Page.PAYMENT && (
         <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
           <div className="bg-blue-700 p-10 text-white flex justify-between items-center">
